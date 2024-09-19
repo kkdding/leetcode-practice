@@ -32,6 +32,8 @@
 // Related Topics 栈 数组 双指针 动态规划 单调栈 👍 5305 👎 0
 
 
+import java.util.Stack;
+
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int trap(int[] height) {
