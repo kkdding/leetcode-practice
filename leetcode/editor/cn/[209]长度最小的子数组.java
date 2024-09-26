@@ -51,26 +51,23 @@
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int minSubArrayLen(int target, int[] nums) {
-
-        int n = nums.length;
-        int minLen = n + 1;
-        for (int i = 0; i < n; i++){
-
-            int sum = 0;
-            int len = n + 1;
-            for(int j = i; j < n; j++){
-                sum += nums[j];
-                if(sum >= target){
-                    len = j - i + 1;
+        int left = 0;
+        int right = 0;
+        int sum = 0;
+        int minLen = Integer.MAX_VALUE;
+        while (right < nums.length){
+            sum += nums[right];
+            while (sum >= target){
+                sum -= nums[left];
+                left++;
+                if(sum < target) {
+                    minLen = minLen > right - left + 2 ? right - left + 2 : minLen;
                     break;
                 }
             }
-            minLen = Math.min(minLen, len);
+            right++;
         }
-        if(minLen == n + 1){
-            return 0;
-        }
-        return minLen;
+        return minLen == Integer.MAX_VALUE ? 0: minLen;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
