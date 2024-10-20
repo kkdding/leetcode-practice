@@ -59,43 +59,28 @@
 // Related Topics 设计 哈希表 链表 双向链表 👍 3289 👎 0
 
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 //leetcode submit region begin(Prohibit modification and deletion)
-class LRUCache {
-
-    int capacity = 0;
-
-    Queue<Integer> queue = new LinkedList<>();
-    Map<Integer, Integer> map = new HashMap<>();
+class LRUCache extends LinkedHashMap<Integer, Integer>{
+    private int capacity;
 
     public LRUCache(int capacity) {
+        super(capacity, 0.75F, true);
         this.capacity = capacity;
     }
-    
+
     public int get(int key) {
-        if(map.containsKey(key)){
-            queue.remove(key);
-            queue.add(key);
-            return map.get(key);
-        }
-        return -1;
+        return super.getOrDefault(key, -1);
     }
-    
+
     public void put(int key, int value) {
-        if(map.containsKey(key)){
-            queue.remove(key);
-            map.remove(key);
-        }
-        map.put(key, value);
-        if(queue.size() == capacity){
-            map.remove(queue.peek());
-            queue.poll();
-        }
-        queue.add(key);
+        super.put(key, value);
+    }
+
+    @Override
+    protected boolean removeEldestEntry(Map.Entry<Integer, Integer> eldest) {
+        return size() > capacity;
     }
 }
 
