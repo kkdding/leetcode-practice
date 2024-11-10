@@ -63,24 +63,24 @@ class Solution {
         if (len % 2 == 1) return false;
 
         Deque<Character> stack = new LinkedList<Character>();
-        Map<Character, Character> map = new HashMap<Character, Character>() {
-            {
-                put(')', '(');
-                put('}', '{');
-                put(']', '[');
-            }
-        };
+        Map<Character, Character> map = new HashMap<Character, Character>();
+        map.put(')', '(');
+        map.put(']', '[');
+        map.put('}', '{');
+
         for (int i = 0; i < len; i++) {
-            char c = s.charAt(i);
-            if (map.containsValue(c)) {
-                stack.push(c);
-            } else if (map.containsKey(c)) {
-                if (stack.isEmpty() || map.get(c) != stack.peek()) {
-                    return false;
-                }
+
+            char ch = s.charAt(i);
+            if (map.containsValue(ch)) {
+                stack.push(ch);
+            }else if(map.containsKey(ch)){
+                if(stack.isEmpty() || map.get(ch) != stack.peek()) return false;
                 stack.pop();
+            }else {
+                return false;
             }
         }
+
         return stack.isEmpty();
     }
 }
