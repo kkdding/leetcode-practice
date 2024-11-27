@@ -37,7 +37,8 @@
 package main
 
 func moveZeroes(nums []int) {
-    slow, fast, numsLen := 0, 0, len(nums)
+    slow, fast := 0, 0
+    numsLen := len(nums)
     for fast < numsLen {
         if nums[fast] != 0 {
             nums[slow], nums[fast] = nums[fast], nums[slow]
