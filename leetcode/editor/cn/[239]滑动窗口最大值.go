@@ -43,38 +43,30 @@
 // leetcode submit region begin(Prohibit modification and deletion)
 package main
 
-import "math"
-
 func maxSlidingWindow(nums []int, k int) []int {
-	maxIndex := findMax(nums[:k])
-	res := make([]int, len(nums)-k+1)
-	res[0] = nums[maxIndex]
-
-	for i := 1; i+k-1 < len(nums); i++ {
-		if i > maxIndex {
-			maxIndex = findMax(nums[i : i+k])+i
-			res[i] = nums[maxIndex]
-		} else {
-			if nums[i+k-1] > nums[maxIndex] {
-				res[i] = nums[i+k-1]
-				maxIndex = i + k - 1
-			} else {
-				res[i] = res[i-1]
-			}
+	q := make([]int, 0)
+	push := func(i int) {
+		for len(q) > 0 && nums[i] >= nums[q[len(q)-1]] {
+			q = q[:len(q)-1]
 		}
+		q = append(q, i)
 	}
-	return res
-}
 
-func findMax(nums []int) int {
-	index, maxValue := 0, math.MinInt
-	for i, v := range nums {
-		if v > maxValue {
-			maxValue = v
-			index = i
+	for i := 0; i < k; i++ {
+		push(i)
+	}
+
+	n := len(nums)
+	ans := make([]int, 1, n-k+1)
+	ans[0] = nums[q[0]]
+	for i := k; i < n; i++ {
+		push(i)
+		for q[0] <= i-k {
+			q = q[1:]
 		}
+		ans = append(ans, nums[q[0]])
 	}
-	return index
-}
 
+	return ans
+}
 //leetcode submit region end(Prohibit modification and deletion)
