@@ -63,37 +63,55 @@ func minWindow(s string, t string) string {
         return s
     }
 
-    left, right, res := 0, len(t)-1, ""
-    minLen := len(s)
-    for left <= right && right < len(s) {
-        if cover(s[left:right+1], t) {
-            if right-left+1 <= minLen {
-                minLen = right - left + 1
-                res = s[left : right+1]
+    // 记录 t 中每个字符的出现次数
+    target := make(map[byte]int)
+    for i := 0; i < len(t); i++ {
+        target[t[i]]++
+    }
+
+    // 记录当前窗口中每个字符的出现次数
+    window := make(map[byte]int)
+    // 记录当前窗口中满足 t 字符频率要求的字符种类数
+    count := 0
+    // 最小窗口的左右边界和最小长度
+    left, right := 0, 0
+    minLeft, minRight, minLen := 0, 0, len(s)+1
+
+    for right < len(s) {
+        // 移入窗口的字符
+        c := s[right]
+        right++
+        // 更新窗口内字符的出现次数
+        window[c]++
+        // 如果当前字符的出现次数达到了 t 中该字符的出现次数，则满足要求的字符种类数加 1
+        if target[c] > 0 && window[c] == target[c] {
+            count++
+        }
+
+        // 判断左侧窗口是否需要收缩
+        for count == len(target) {
+            // 更新最小窗口
+            if right-left < minLen {
+                minLen = right - left
+                minLeft = left
+                minRight = right
             }
+            // 移出窗口的字符
+            d := s[left]
             left++
-        } else {
-            right++
+            // 更新窗口内字符的出现次数
+            window[d]--
+            // 如果当前字符的出现次数小于 t 中该字符的出现次数，则满足要求的字符种类数减 1
+            if target[d] > 0 && window[d] < target[d] {
+                count--
+            }
         }
     }
 
-    return res
-}
-
-func cover(long, short string) bool {
-    list := make(map[string]int)
-    for _, v := range short {
-        list[string(v)]++
+    if minLen > len(s) {
+        return ""
     }
-    for _, v := range long {
-        list[string(v)]--
-    }
-    for _, v := range list {
-        if v > 0 {
-            return false
-        }
-    }
-    return true
+    return s[minLeft:minRight]
 }
 
 //leetcode submit region end(Prohibit modification and deletion)
