@@ -51,24 +51,21 @@
 package main
 
 //type ListNode struct {
-//    Val  int
-//    Next *ListNode
+//	Val  int
+//	Next *ListNode
 //}
 
 func removeNthFromEnd(head *ListNode, n int) *ListNode {
     dummy := new(ListNode)
     dummy.Next = head
-    fast, slow := dummy, dummy
 
-    for n > 0 {
-        fast = fast.Next
-        n--
+    stack := make([]*ListNode, 0)
+    for cur := dummy; cur != nil; cur = cur.Next {
+        stack = append(stack, cur)
     }
 
-    for fast.Next != nil {
-        fast, slow = fast.Next, slow.Next
-    }
-    slow.Next = slow.Next.Next
+    prev := stack[len(stack)-n-1]
+    prev.Next = prev.Next.Next
 
     return dummy.Next
 }
