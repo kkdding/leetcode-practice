@@ -66,20 +66,21 @@
  */
 package main
 
+//type ListNode struct {
+//	Val  int
+//	Next *ListNode
+//}
+
 func detectCycle(head *ListNode) *ListNode {
-    slow, fast := head, head
-    for fast != nil && fast.Next != nil {
-        slow = slow.Next
-        fast = fast.Next.Next
-        if slow == fast {
-            for slow != head {
-                slow = slow.Next
-                head = head.Next
-            }
-            return head
-        }
-    }
-    return nil
+	nodes := make(map[*ListNode]bool)
+	for head != nil {
+		if nodes[head] {
+			return head
+		}
+		nodes[head] = true
+		head = head.Next
+	}
+	return nil
 }
 
 //leetcode submit region end(Prohibit modification and deletion)
