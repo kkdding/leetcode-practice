@@ -128,8 +128,14 @@ func (mll *MyLinkedList) DeleteAtIndex(index int) {
 		return
 	}
 	head := mll.dummyHead.Next
-	head.Next.Pre = head.Pre
-	head.Pre.Next = head.Next
+	for head.Next != this.dummy && index > 0 {
+		head = head.Next
+		index--
+	}
+	if index == 0 {
+		head.Next.Pre = head.Pre
+		head.Pre.Next = head.Next
+	}
 }
 
 /**
