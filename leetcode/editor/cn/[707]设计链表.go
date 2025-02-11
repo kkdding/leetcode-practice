@@ -56,93 +56,80 @@ package main
 //type ListNode struct {
 //    Val  int
 //    Next *ListNode
+//    Pre  *ListNode
 //}
 
 type MyLinkedList struct {
-    dummyHead *ListNode
-    size      int
+	dummyHead *ListNode
 }
 
 func Constructor() MyLinkedList {
-    node := new(ListNode)
-    return MyLinkedList{
-        dummyHead: node,
-        size:      0,
-    }
+	node := new(ListNode)
+	node.Next = node
+	node.Pre = node
+	return MyLinkedList{
+		dummyHead: node,
+	}
 }
 
 func (mll *MyLinkedList) Get(index int) int {
-    if index < 0 || index >= mll.size || mll == nil {
-        return -1
-    }
-
-    ptr := mll.dummyHead.Next
-    for index > 0 {
-        ptr = ptr.Next
-        index--
-    }
-    return ptr.Val
+	head := mll.dummyHead.Next
+	for head != mll.dummyHead && index > 0 {
+		head = head.Next
+		index--
+	}
+	if index != 0 {
+		return -1
+	}
+	return head.Val
 }
 
 func (mll *MyLinkedList) AddAtHead(val int) {
-    node := &ListNode{
-        Val: val,
-    }
-    node.Next = mll.dummyHead.Next
-    mll.dummyHead.Next = node
-
-    mll.size++
+	node := &ListNode{
+		Val:  val,
+		Next: mll.dummyHead.Next,
+		Pre:  mll.dummyHead,
+	}
+	mll.dummyHead.Next.Pre = node
+	mll.dummyHead.Next = node
 }
 
 func (mll *MyLinkedList) AddAtTail(val int) {
-    node := &ListNode{
-        Val:  val,
-        Next: nil,
-    }
-    ptr := mll.dummyHead
-    for ptr.Next != nil {
-        ptr = ptr.Next
-    }
-    ptr.Next = node
-
-    mll.size++
+	node := &ListNode{
+		Val:  val,
+		Next: mll.dummyHead,
+		Pre:  mll.dummyHead.Pre,
+	}
+	mll.dummyHead.Pre.Next = node
+	mll.dummyHead.Pre = node
 }
 
 func (mll *MyLinkedList) AddAtIndex(index int, val int) {
-    if index > mll.size {
-        return
-    }
-    if index < 0 {
-        index = 0
-    }
+	head := mll.dummyHead.Next
+	for head != mll.dummyHead && index > 0 {
+		head = head.Next
+		index--
+	}
+	if index > 0 {
+		return
+	}
 
-    node := &ListNode{
-        Val: val,
-    }
-    ptr := mll.dummyHead
-    for index > 0 {
-        ptr = ptr.Next
-        index--
-    }
-    node.Next = ptr.Next
-    ptr.Next = node
-
-    mll.size++
+	node := &ListNode{
+		Val:  val,
+		Next: head,
+		Pre:  head.Pre,
+	}
+	head.Pre.Next = node
+	head.Pre = node
 }
 
 func (mll *MyLinkedList) DeleteAtIndex(index int) {
-    if index < 0 || index >= mll.size {
-        return
-    }
-
-    ptr := mll.dummyHead
-    for index > 0 {
-        ptr = ptr.Next
-        index--
-    }
-    ptr.Next = ptr.Next.Next
-
-    mll.size--
+	if mll.dummyHead.Next == mll.dummyHead {
+		return
+	}
+	head := mll.dummyHead.Next
+	head.Next.Pre = head.Pre
+	head.Pre.Next = head.Next
 }
 
 /**
