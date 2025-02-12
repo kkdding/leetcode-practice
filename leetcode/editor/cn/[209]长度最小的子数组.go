@@ -53,23 +53,23 @@ package main
 import "math"
 
 func minSubArrayLen(target int, nums []int) int {
-	left, right, res := 0, 0, math.MaxInt32
+	left, right, res := 0, 0, math.MaxInt
 	sum := nums[left]
 	for left <= right && right < len(nums) {
-		if sum < target {
+		if sum >= target {
+			res = min(right-left+1, res)
+			sum -= nums[left]
+			left++
+		} else {
 			right++
 			if right == len(nums) {
 				break
 			}
 			sum += nums[right]
-		} else {
-			res = min(res, right-left+1)
-			sum -= nums[left]
-			left++
 		}
 	}
 
-	if res == math.MaxInt32 {
+	if res == math.MaxInt {
 		return 0
 	}
 	return res
