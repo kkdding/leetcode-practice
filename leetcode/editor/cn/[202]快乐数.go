@@ -45,7 +45,7 @@
 package main
 
 func isHappy(n int) bool {
-	set, getNext := make(map[int]struct{}), func(num int) int {
+	getNext := func(num int) int {
 		sum := 0
 		for num > 0 {
 			digit := num % 10
@@ -54,14 +54,12 @@ func isHappy(n int) bool {
 		}
 		return sum
 	}
-	for n != 1 {
-		if _, ok := set[n]; ok {
-			return false
-		}
-		set[n] = struct{}{}
-		n = getNext(n)
+
+    slow, fast :=n, getNext(n)
+	for slow != fast {
+		slow, fast = getNext(slow), getNext(getNext(fast))
 	}
-	return true
+	return slow == 1
 }
 
 //leetcode submit region end(Prohibit modification and deletion)
