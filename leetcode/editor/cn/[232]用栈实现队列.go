@@ -64,45 +64,45 @@
 package main
 
 type MyQueue struct {
-	stackIn  []int
-	stackOut []int
+    stackIn  []int
+    stackOut []int
 }
 
-func Constructor() MyQueue {
-	return MyQueue{
-		stackIn:  []int{},
-		stackOut: []int{},
-	}
+func QueueConstructor() MyQueue {
+    return MyQueue{
+        stackIn:  []int{},
+        stackOut: []int{},
+    }
 }
 
 func (q *MyQueue) Push(x int) {
-	q.stackIn = append(q.stackIn, x)
+    q.stackIn = append(q.stackIn, x)
 }
 
 func (q *MyQueue) Pop() int {
-	if len(q.stackOut) == 0 {
+    if len(q.stackOut) == 0 {
         for len(q.stackIn) > 0 {
             q.stackOut = append(q.stackOut, q.stackIn[len(q.stackIn)-1])
             q.stackIn = q.stackIn[:len(q.stackIn)-1]
         }
-	}
-	res := q.stackOut[len(q.stackOut)-1]
-	q.stackOut = q.stackOut[:len(q.stackOut)-1]
+    }
+    res := q.stackOut[len(q.stackOut)-1]
+    q.stackOut = q.stackOut[:len(q.stackOut)-1]
     return res
 }
 
 func (q *MyQueue) Peek() int {
-	if len(q.stackOut) == 0 {
-		for len(q.stackIn) > 0 {
-			q.stackOut = append(q.stackOut, q.stackIn[len(q.stackIn)-1])
-			q.stackIn = q.stackIn[:len(q.stackIn)-1]
-		}
-	}
-	return q.stackOut[len(q.stackOut)-1]
+    if len(q.stackOut) == 0 {
+        for len(q.stackIn) > 0 {
+            q.stackOut = append(q.stackOut, q.stackIn[len(q.stackIn)-1])
+            q.stackIn = q.stackIn[:len(q.stackIn)-1]
+        }
+    }
+    return q.stackOut[len(q.stackOut)-1]
 }
 
 func (q *MyQueue) Empty() bool {
-	return len(q.stackIn) == 0 && len(q.stackOut) == 0
+    return len(q.stackIn) == 0 && len(q.stackOut) == 0
 }
 
 /**
