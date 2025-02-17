@@ -53,42 +53,35 @@ package main
 import "sort"
 
 func threeSum(nums []int) [][]int {
-	sort.Ints(nums)
-	var result [][]int
-	length := len(nums)
-	if length < 3 {
-		return [][]int{}
-	}
-	for index, value := range nums {
-		if nums[index] > 0 {
-			return result
-		}
-		if index > 0 && nums[index] == nums[index-1] {
-			continue
-		}
-
-		left := index + 1
-		right := length - 1
-		for left < right {
-			sum := value + nums[left] + nums[right]
-			switch {
-			case sum > 0:
-				right--
-			case sum < 0:
-				left++
-			default:
-				result = append(result, []int{nums[index], nums[left], nums[right]})
-				for left < right && nums[left] == nums[left+1] {
-					left++
-				}
-				for left < right && nums[right] == nums[right-1] {
-					right--
-				}
-				left++
-				right--
-			}
-		}
-	}
-	return result
+    res := make([][]int, 0)
+    sort.Ints(nums)
+    for i := 0; i < len(nums)-2; i++ {
+        n1 := nums[i]
+        if n1 > 0 {
+            break
+        }
+        if i > 0 && n1 == nums[i-1] {
+            continue
+        }
+        l, r := i+1, len(nums)-1
+        for l < r {
+            n2, n3 := nums[l], nums[r]
+            if n1+n2+n3 == 0 {
+                res = append(res, []int{n1, n2, n3})
+                for l < r && nums[l] == n2 {
+                    l++
+                }
+                for l < r && nums[r] == n3 {
+                    r--
+                }
+            } else if n1+n2+n3 > 0 {
+                r--
+            } else {
+                l++
+            }
+        }
+    }
+    return res
 }
+
 //leetcode submit region end(Prohibit modification and deletion)
