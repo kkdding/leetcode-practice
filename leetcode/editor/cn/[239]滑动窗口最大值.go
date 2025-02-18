@@ -43,30 +43,48 @@
 // leetcode submit region begin(Prohibit modification and deletion)
 package main
 
-func maxSlidingWindow(nums []int, k int) []int {
-	q := make([]int, 0)
-	push := func(i int) {
-		for len(q) > 0 && nums[i] >= nums[q[len(q)-1]] {
-			q = q[:len(q)-1]
-		}
-		q = append(q, i)
-	}
-
-	for i := 0; i < k; i++ {
-		push(i)
-	}
-
-	n := len(nums)
-	ans := make([]int, 1, n-k+1)
-	ans[0] = nums[q[0]]
-	for i := k; i < n; i++ {
-		push(i)
-		for q[0] <= i-k {
-			q = q[1:]
-		}
-		ans = append(ans, nums[q[0]])
-	}
-
-	return ans
+type moQueue struct {
+    queue []int
 }
+
+func (m *moQueue) front() int {
+    return m.queue[0]
+}
+
+func (m *moQueue) back() int {
+    return m.queue[len(m.queue)-1]
+}
+
+func (m *moQueue) empty() bool {
+    return len(m.queue) == 0
+}
+
+func (m *moQueue) push(elem int) {
+    for !m.empty() && elem > m.back() {
+        m.queue = m.queue[:len(m.queue)-1]
+    }
+    m.queue = append(m.queue, elem)
+}
+
+func (m *moQueue) pop(elem int) {
+	if m.front() == elem{
+        m.queue = m.queue[1:]
+    }
+}
+
+func maxSlidingWindow(nums []int, k int) []int {
+    res := make([]int, 0)
+    mo := new(moQueue)
+    for i := 0; i < k; i++ {
+        mo.push(nums[i])
+    }
+    res = append(res, mo.front())
+    for i := 0; i < len(nums)-k; i++ {
+        mo.pop(nums[i])
+        mo.push(nums[i+k])
+        res = append(res, mo.front())
+    }
+    return res
+}
+
 //leetcode submit region end(Prohibit modification and deletion)
