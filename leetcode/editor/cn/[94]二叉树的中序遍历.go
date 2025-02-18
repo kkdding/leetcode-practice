@@ -55,18 +55,15 @@ package main
 //	Right *TreeNode
 //}
 
-func inorderTraversal(root *TreeNode) (res []int) {
-	order(root, &res)
-	return
-}
-
-func order(node *TreeNode, res *[]int) {
-    if node == nil {
-		return
+func inorderTraversal(root *TreeNode) []int {
+    res := make([]int, 0)
+    if root == nil {
+        return res
     }
-	order(node.Left, res)
-	*res = append(*res, node.Val)
-	order(node.Right, res)
+    res = append(res, inorderTraversal(root.Left)...)
+	res = append(res, root.Val)
+	res = append(res, inorderTraversal(root.Right)...)
+    return res
 }
 
 //leetcode submit region end(Prohibit modification and deletion)
