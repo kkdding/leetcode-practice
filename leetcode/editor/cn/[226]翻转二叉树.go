@@ -59,10 +59,7 @@ func invertTree(node *TreeNode) *TreeNode {
 	if node == nil {
 		return nil
 	}
-	left := invertTree(node.Left)
-	right := invertTree(node.Right)
-	node.Left = right
-	node.Right = left
+	node.Left, node.Right = invertTree(node.Right), invertTree(node.Left)
 	return node
 }
 
