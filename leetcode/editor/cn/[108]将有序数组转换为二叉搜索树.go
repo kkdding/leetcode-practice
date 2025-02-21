@@ -49,18 +49,17 @@ package main
 //}
 
 func sortedArrayToBST(nums []int) *TreeNode {
-	return change(nums, 0, len(nums)-1)
-}
-
-func change(nums []int, left, right int) *TreeNode {
-	if left > right {
+	left, right := 0, len(nums)
+	if right == 0 {
 		return nil
 	}
-	mid := (left + right + 1) / 2
-	root := &TreeNode{Val: nums[mid]}
-	root.Left = change(nums, left, mid-1)
-	root.Right = change(nums, mid+1, right)
-	return root
+	mid := left + (right-left)/2
+	node := &TreeNode{
+		Val: nums[mid],
+		Left: sortedArrayToBST(nums[left:mid]),
+		Right: sortedArrayToBST(nums[mid+1:right]),
+	}
+	return node
 }
 
 //leetcode submit region end(Prohibit modification and deletion)
